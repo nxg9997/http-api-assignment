@@ -10,13 +10,31 @@ sendBtn.onclick = e => {
     fetch(`${pageSelect.value}`,{method:'GET',headers:{'accept':typeSelect.value}}).then((res)=>{
         console.log(res);
         passed.innerHTML = res.statusText;
-        res.json().then((data)=>{
-            console.log(data);
-            if(typeSelect.value === 'application/json'){
+        if(typeSelect.value === 'application/json'){
+            res.json().then((data)=>{
+                console.log(data);
                 message.innerHTML = data.Message;
-            }
-        });
-        let xmlRes = new XMLDocument();
+                
+            });
+        }
+        else{
+            res.text().then((data)=>{
+                //console.log(data.toString().substr(1,data.toString().length-1));
+                //let str = data.toString().substr(1,data.toString().length-1);
+                console.log(data);
+                let parser = new DOMParser();
+                let xmlDoc = parser.parseFromString(data,'text/xml');
+                console.log(xmlDoc);
+                message.innerHTML = xmlDoc.querySelector('message').textContent;
+            });
+        }
+        //let xmlRes = new XMLDocument();
     }
     );
 };
+
+function test(){
+    let parser = new DOMParser();
+    let doc = parser.parseFromString("<message>This is an XML success response</message>",'text/xml');
+    console.log(doc);
+}

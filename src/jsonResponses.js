@@ -28,31 +28,32 @@ const getSuccess = (req, res) => {
 };
 
 const getBadRequest = (req, res) => {
-  const queries = getQueries(req.headers.referer);
-  if (queries.valid === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/json' }, { Message: 'This is a bad request response' });
-  else sendResponse(req, res, 400, { 'Content-Type': 'application/json' }, { Message: 'This is a bad request response' });
+  console.log(`line 31:${req.url}`);
+  const queries = getQueries(req.url);
+  if (queries.valid === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/json' }, { Message: 'This is a valid request response' });
+  else sendResponse(req, res, 400, { 'Content-Type': 'application/json' }, { Message: 'This is a bad request response', id: 'Bad Request' });
 };
 
 const getUnauthorized = (req, res) => {
-  const queries = getQueries(req.headers.referer);
-  if (queries.loggedIn === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/json' }, { Message: 'This is an unauthorized response' });
-  else sendResponse(req, res, 401, { 'Content-Type': 'application/json' }, { Message: 'This is an unauthorized response' });
+  const queries = getQueries(req.url);
+  if (queries.loggedIn === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/json' }, { Message: 'This is an authorized response' });
+  else sendResponse(req, res, 401, { 'Content-Type': 'application/json' }, { Message: 'This is an unauthorized response', id: 'Unauthorized' });
 };
 
 const getForbidden = (req, res) => {
-  sendResponse(req, res, 403, { 'Content-Type': 'application/json' }, { Message: 'This is a forbidden response' });
+  sendResponse(req, res, 403, { 'Content-Type': 'application/json' }, { Message: 'This is a forbidden response', id: 'Forbidden' });
 };
 
 const getInternal = (req, res) => {
-  sendResponse(req, res, 500, { 'Content-Type': 'application/json' }, { Message: 'This is an internal response' });
+  sendResponse(req, res, 500, { 'Content-Type': 'application/json' }, { Message: 'This is an internal response', id: 'Internal Server Error' });
 };
 
 const getNotimplemented = (req, res) => {
-  sendResponse(req, res, 501, { 'Content-Type': 'application/json' }, { Message: 'This is a not implemented response' });
+  sendResponse(req, res, 501, { 'Content-Type': 'application/json' }, { Message: 'This is a not implemented response', id: 'Not Implemented' });
 };
 
 const getNotFound = (req, res) => {
-  sendResponse(req, res, 404, { 'Content-Type': 'application/json' }, { Message: 'This is a not found response' });
+  sendResponse(req, res, 404, { 'Content-Type': 'application/json' }, { Message: 'This is a not found response', id: 'Not Found' });
 };
 
 module.exports.getSuccess = getSuccess;

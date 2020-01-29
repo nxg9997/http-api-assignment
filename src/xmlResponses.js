@@ -1,7 +1,7 @@
 
 const sendResponse = (req, res, code, headers, msg) => {
   res.writeHead(code, headers);
-  res.write(JSON.stringify(msg));
+  res.write(`<response>${msg}</response>`);
   res.end();
 };
 
@@ -28,31 +28,31 @@ const getSuccess = (req, res) => {
 };
 
 const getBadRequest = (req, res) => {
-  const queries = getQueries(req.headers.referer);
-  if (queries.valid === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/xml' }, '<message>This is an XML bad request response</message>');
-  else sendResponse(req, res, 400, { 'Content-Type': 'application/xml' }, '<message>This is an XML bad request response</message>');
+  const queries = getQueries(req.url);
+  if (queries.valid === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/xml' }, '<message>This is an XML valid request response</message>');
+  else sendResponse(req, res, 400, { 'Content-Type': 'application/xml' }, '<message>This is an XML bad request response</message><id>Bad Request</id>');
 };
 
 const getUnauthorized = (req, res) => {
-  const queries = getQueries(req.headers.referer);
-  if (queries.loggedIn === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/xml' }, '<message>This is an XML unauthorized response</message>');
-  else sendResponse(req, res, 401, { 'Content-Type': 'application/xml' }, '<message>This is an XML unauthorized response</message>');
+  const queries = getQueries(req.url);
+  if (queries.loggedIn === 'true') sendResponse(req, res, 200, { 'Content-Type': 'application/xml' }, '<message>This is an XML authorized response</message>');
+  else sendResponse(req, res, 401, { 'Content-Type': 'application/xml' }, '<message>This is an XML unauthorized response</message><id>Unauthorized</id>');
 };
 
 const getForbidden = (req, res) => {
-  sendResponse(req, res, 403, { 'Content-Type': 'application/xml' }, '<message>This is an XML forbidden response</message>');
+  sendResponse(req, res, 403, { 'Content-Type': 'application/xml' }, '<message>This is an XML forbidden response</message><id>Forbidden</id>');
 };
 
 const getInternal = (req, res) => {
-  sendResponse(req, res, 500, { 'Content-Type': 'application/xml' }, '<message>This is an XML internal response</message>');
+  sendResponse(req, res, 500, { 'Content-Type': 'application/xml' }, '<message>This is an XML internal response</message><id>Internal Server Error</id>');
 };
 
 const getNotimplemented = (req, res) => {
-  sendResponse(req, res, 501, { 'Content-Type': 'application/xml' }, '<message>This is an XML not implemented response</message>');
+  sendResponse(req, res, 501, { 'Content-Type': 'application/xml' }, '<message>This is an XML not implemented response</message><id>Not Implemented</id>');
 };
 
 const getNotFound = (req, res) => {
-  sendResponse(req, res, 404, { 'Content-Type': 'application/xml' }, '<message>This is an XML not found response</message>');
+  sendResponse(req, res, 404, { 'Content-Type': 'application/xml' }, '<message>This is an XML not found response</message><id>Not Found</id>');
 };
 
 module.exports.getSuccess = getSuccess;
